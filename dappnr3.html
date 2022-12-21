@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Call transfer() function</title>
+  <h1> transfer() function </h1>
+  <body>
+    <button id="transferfunds">Transfer Funds</button>
+  </body>
+</head>
+
+<script src="https://cdn.jsdelivr.net/npm/web3@latest/dist/web3.min.js"></script>
+<script>
+    const web3 = new Web3(window.web3.currentProvider);                                        // need to use the injected version of web3
+    const contractAddress = '0xf1ab33DdDacC089DBA84FA5936574227AA83F606';
+    const contractABI = [
+  {
+    "constant": false,
+    "inputs": [
+      {
+        "name": "_to",
+        "type": "address"
+      },
+      {
+        "name": "_value",
+        "type": "uint256"
+      }
+    ],
+    "name": "transfer",
+    "outputs": [
+      {
+        "name": "",
+        "type": "bool"
+      }
+    ],
+    "payable": false,
+    "stateMutability": "nonpayable",
+    "type": "function"
+  }
+];
+    const getTransferFundsBtn = document.getElementById("transferfunds");
+    const contract = new web3.eth.Contract(contractABI, contractAddress);
+    getTransferFundsBtn.addEventListener('click', async () => {
+        const accounts = await window.ethereum.enable();
+        const address = accounts[0];
+        const result = await contract.methods.transfer('0x15433DA387451F9dE4565280C85506CB71aF9376', 10).send({
+            from: address,
+        });
+        console.log(result);
+    });
+</script>
